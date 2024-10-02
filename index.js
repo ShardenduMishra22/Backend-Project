@@ -3,7 +3,8 @@ import express from 'express';
 import dotenv from 'dotenv';
 import colors from 'colors';  
 import cors from 'cors';
-import path from 'path'; // Import path module
+import path, { dirname } from 'path'; // Import path and dirname
+import { fileURLToPath } from 'url'; // Import fileURLToPath
 import connectDB from './config/connectDB.js';
 import schema from './schema/schema.js';
 
@@ -24,6 +25,10 @@ app.use("/graphql", graphqlHTTP({
     graphiql: process.env.NODE_ENV === 'development'
 }));
 
+// Get the directory name of the current module
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 // Serve static files from the dist directory
 app.use(express.static(path.join(__dirname, 'dist')));
 
@@ -37,8 +42,3 @@ app.listen(port, () => {
     console.log(`\nServer is running on port ${port}`.blue.bold.underline);
     console.log(`Click To Connect to http://localhost:${port}`.blue.bold.underline);
 });
-
-// Trial Server Working 
-// app.get('/', (req, res) => {
-//     res.send('Hello World');
-// });
